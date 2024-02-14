@@ -1,13 +1,21 @@
 import prisma from "@/prisma";
 import { NextResponse } from "next/server";
 
-export async function main() {
+// export async function main() {
+//   try {
+//     await prisma.$connect();
+//   } catch (err) {
+//     return Error("Database Connection Unsuccessfull");
+//   }
+// }
+
+export const main = async () => {
   try {
     await prisma.$connect();
   } catch (err) {
-    return Error("Database Connection Unsuccessfull");
+    throw new Error("Database Connection Unsuccessful");
   }
-}
+};
 
 export const GET = async (req: Request, res: NextResponse) => {
   try {
