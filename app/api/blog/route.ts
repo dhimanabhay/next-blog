@@ -9,17 +9,21 @@ import { NextResponse } from "next/server";
 //   }
 // }
 
-export const main = async () => {
-  try {
-    await prisma.$connect();
-  } catch (err) {
-    throw new Error("Database Connection Unsuccessful");
-  }
-};
+// export const main = async () => {
+//   try {
+//     await prisma.$connect();
+//   } catch (err) {
+//     throw new Error("Database Connection Unsuccessful");
+//   }
+// };
 
 export const GET = async (req: Request, res: NextResponse) => {
   try {
-    await main();
+    try {
+      await prisma.$connect();
+    } catch (err) {
+      throw new Error("Database Connection Unsuccessful");
+    }
     const posts = await prisma.post.findMany();
     return NextResponse.json({ message: "SUCCESS", posts }, { status: 200 });
   } catch (err) {
@@ -32,7 +36,11 @@ export const GET = async (req: Request, res: NextResponse) => {
 export const POST = async (req: Request, res: NextResponse) => {
   try {
     const { title, description } = await req.json();
-    await main();
+    try {
+      await prisma.$connect();
+    } catch (err) {
+      throw new Error("Database Connection Unsuccessful");
+    }
     const posts = await prisma.post.create({ data: { title, description } });
     return NextResponse.json({ message: "SUCCESS", posts }, { status: 201 });
   } catch (err) {
